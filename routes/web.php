@@ -11,8 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', 'SearchController@search');
 Route::get('/search', 'SearchController@search');
