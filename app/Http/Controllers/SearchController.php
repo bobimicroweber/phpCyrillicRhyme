@@ -26,6 +26,8 @@ class SearchController extends Controller
 
 		foreach ($dbWords as $word) {
 
+           // echo (SoundexBG::dmstring($word->word)[0]- SoundexBG::dmstring($getWord)[0]) . PHP_EOL;
+
 			$dbWordCombinations = $this->wordCombinations($word->word, 3);
 
 			$wordCombination = mb_strtolower(end($getWordCombinations));

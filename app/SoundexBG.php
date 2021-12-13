@@ -234,8 +234,10 @@ class SoundexBG
             return null;
 
         $matches = explode(' ', $string);
-        foreach ($matches as $key => $match)
+        foreach ($matches as $key => $match) {
             $matches[$key] = self::dmword($match, $is_cyrillic);
+        }
+
         return $matches;
     }
 
