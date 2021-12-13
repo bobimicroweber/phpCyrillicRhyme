@@ -40,7 +40,7 @@ class AddWords extends Command
     {
         ini_set('memory_limit', '-1');
 
-        Word::truncate();
+       // Word::truncate();
 
         $wordList = [];
 
