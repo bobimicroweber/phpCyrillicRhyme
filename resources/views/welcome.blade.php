@@ -86,7 +86,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    phpCyrillicRhyme 
+                    phpCyrillicRhyme
                 </div>
 	                <small>
 	                Търсене на рими
@@ -94,17 +94,19 @@
 					<br />
 					<br />
 		         {{ Form::open(array('method'=>'GET', 'url' => '/search')) }}
-		      	 {{ Form::text('word','',array('size'=>43)) }}
+		      	 {{ Form::text('word',$searchedWord,array('size'=>43)) }}
 		         {{ Form::submit('Търсене') }}
 		         {{ Form::close() }}
-		         
+
 		     		 <br />
 					<br />
 		      		Класация на римите:
 		      		<br />
+                    <div style="font-size:18px;font-weight:600; color:#424242;width:60%;margin: 0 auto;margin-top:15px;">
 		      		@foreach($results as $word)
-               		{{ $word['word'] }}, 
+               		{{ $word['word'] }},
                		@endforeach
+                    </div>
             </div>
         </div>
     </body>

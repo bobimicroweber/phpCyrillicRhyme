@@ -15,6 +15,8 @@ class SearchController extends Controller
         $rhymeClassation = array();
 
 		$getWord = Input::get('word');
+        $getWord = trim($getWord);
+        
 		$getWordCombinations = $this->wordCombinations($getWord);
 
 		$dbWords = Cache::rememberForever('words', function () {
@@ -34,25 +36,9 @@ class SearchController extends Controller
 					'level'=>1
 				);
 			}
-
-			/* foreach ($getWordCombinations as $wordCombination) {
-				foreach($dbWordCombinations as $dbWordCombination) {
-
-					$wordCombination = mb_strtolower($wordCombination);
-					$dbWordCombination = mb_strtolower($dbWordCombination);
-
-					if ($wordCombination == $dbWordCombination) {
-						$rhymeClassation[] = array(
-							'word'=>$word->word,
-							'combinations'=>$dbWordCombinations,
-							'level'=>1
-						);
-					}
-				}
-			} */
 		}
 
-		return view('welcome', ['results'=>$rhymeClassation]);
+		return view('welcome', ['searchedWord'=>$getWord, 'results'=>$rhymeClassation]);
 	}
 
 
