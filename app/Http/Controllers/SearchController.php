@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\SoundexBG;
 use Illuminate\Support\Facades\Input;
 use App\Word;
 use Illuminate\Support\Facades\Cache;
