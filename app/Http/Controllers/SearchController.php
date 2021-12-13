@@ -16,7 +16,7 @@ class SearchController extends Controller
 
 		$getWord = Input::get('word');
         $getWord = trim($getWord);
-        
+
 		$getWordCombinations = $this->wordCombinations($getWord);
 
 		$dbWords = Cache::rememberForever('words', function () {

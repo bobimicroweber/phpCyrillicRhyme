@@ -38,17 +38,23 @@ class AddWords extends Command
      */
     public function handle()
     {
+        ini_set('memory_limit', '-1');
+
+        Word::truncate();
+
         $wordList = [];
 
     	$wordList1 = $this->_getWordlistFromFile('bg-idioms-cyrillic.txt');
     	$wordList2 = $this->_getWordlistFromFile('bg-jargon-cyrillic.txt');
     	$wordList3 = $this->_getWordlistFromFile('bg-neologisms-cyrillic.txt');
     	$wordList4 = $this->_getWordlistFromFile('bg-obscene-cyrillic.txt');
+    	$wordList5 = $this->_getWordlistFromFile('all-cyrillic.txt');
 
         $wordList = array_merge($wordList, $wordList1);
         $wordList = array_merge($wordList, $wordList2);
         $wordList = array_merge($wordList, $wordList3);
         $wordList = array_merge($wordList, $wordList4);
+        $wordList = array_merge($wordList, $wordList5);
 
     	$databaseWords = array();
     	foreach(Word::all() as $word) {
