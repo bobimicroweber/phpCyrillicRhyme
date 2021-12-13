@@ -38,47 +38,62 @@ class AddWords extends Command
      */
     public function handle()
     {
-    	$wordList = $this->_getWordlistFromFile();
-    	
+        $wordList = [];
+
+    	$wordList1 = $this->_getWordlistFromFile('bg-idioms-cyrillic.txt');
+    	$wordList2 = $this->_getWordlistFromFile('bg-jargon-cyrillic.txt');
+    	$wordList3 = $this->_getWordlistFromFile('bg-neologisms-cyrillic.txt');
+    	$wordList4 = $this->_getWordlistFromFile('bg-obscene-cyrillic.txt');
+
+        $wordList = array_merge($wordList, $wordList1);
+        $wordList = array_merge($wordList, $wordList2);
+        $wordList = array_merge($wordList, $wordList3);
+        $wordList = array_merge($wordList, $wordList4);
+
     	$databaseWords = array();
     	foreach(Word::all() as $word) {
     		$databaseWords[] = $word->word;
     	}
-    	
+
     	foreach($wordList as $word) {
-    		
+
+            $word = trim($word);
+
     		$searchWord = array_search($word, $databaseWords);
-    		
-    		if (is_null($searchWord)) {
-    			
-    			$wordModel = new Word();
-    			$wordModel->word = $word;
-    			$wordModel->save();
-    			
-    			echo $word . PHP_EOL;
+
+    		if (!$searchWord) {
+
+                try {
+                    $wordModel = new Word();
+                    $wordModel->word = $word;
+                    $wordModel->save();
+                    // echo $word . PHP_EOL;
+                } catch (\Exception $e) {
+
+                }
     		}
-    		
-    		
+
+
     	}
-    	
+
     }
-    
-    private function _getWordlistFromFile()
+
+    private function _getWordlistFromFile($file)
     {
     	$words = array();
-    	$wordList = file_get_contents(storage_path('wordlist.txt'));
-    	
+    	$wordList = file_get_contents(storage_path($file));
+
     	foreach(explode(PHP_EOL, $wordList) as $word) {
-    		
+
     		$word = trim($word);
-    		
+
     		if (empty($word)) {
     			continue;
     		}
-    		
+
     		$words[] = $word;
     	}
-    	
+
     	return $words;
     }
 }
