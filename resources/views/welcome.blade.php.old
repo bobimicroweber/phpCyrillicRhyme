@@ -9,11 +9,6 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
-        <link href="css/jquery.atwho.css" rel="stylesheet">
-        <script src="//code.jquery.com/jquery.js"></script>
-        <script src="js/jquery.caret.js"></script>
-        <script src="js/jquery.atwho.js"></script>
-
         <!-- Styles -->
         <style>
             html, body {
@@ -93,24 +88,25 @@
                 <div class="title m-b-md">
                     phpCyrillicRhyme
                 </div>
+	                <small>
+	                Търсене на рими
+					</small>
+					<br />
+					<br />
+		         {{ Form::open(array('method'=>'GET', 'url' => '/search')) }}
+		      	 {{ Form::text('word',$searchedWord,array('size'=>43)) }}
+		         {{ Form::submit('Търсене') }}
+		         {{ Form::close() }}
 
-                <style>
-                    .js-autocomplete-editor {
-                        margin:0 auto;
-                        width:50%;
-                        background: #f2f2f2;
-                        height: 600px;
-                        padding:15px;
-                        text-align: left;
-                        font-size: 16px;
-                        font-weight: bold;
-                        color:#000000;
-                    }
-                </style>
-
-
-                <div class="js-autocomplete-editor" contenteditable="true"></div>
-
+		     		 <br />
+					<br />
+		      		Класация на римите:
+		      		<br />
+                    <div style="font-size:18px;font-weight:600; color:#424242;width:60%;margin: 0 auto;margin-top:15px;">
+		      		@foreach($results as $word)
+               		{{ $word['word'] }},
+               		@endforeach
+                    </div>
             </div>
         </div>
     </body>
