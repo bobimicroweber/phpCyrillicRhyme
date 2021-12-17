@@ -71,12 +71,12 @@ class SearchController extends Controller
                     }
                 }
                 if (end($dbWordCombinations) == end($getWordCombinations)) {
-                    $matchesCount = $matchesCount + 2;
+                    $matchesCount = $matchesCount + 3;
                 }
                 if ($dbWordCombinations[0] == $getWordCombinations[0]) {
                     $matchesCount = $matchesCount + 2;
                 }
-                if ($matchesCount > 1) {
+                if ($matchesCount > 3) {
                     $rhymeClassation[] = array(
                         'word' => $word->word,
                         'level' => $matchesCount
