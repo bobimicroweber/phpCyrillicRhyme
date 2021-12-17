@@ -34,8 +34,11 @@ class SearchController extends Controller
             $getWord = last($getWord);
         }
 
-        $getWord = 'Инкубатор';
+        $getWord = trim($getWord);
+        $getWord = mb_strtolower($getWord);
+        $getWord = str_replace('<br>', '', $getWord);
 
+       // $getWord = 'Инкубатор';
 
         $rhymeClassation = [];
 
@@ -49,8 +52,15 @@ class SearchController extends Controller
 
             foreach ($dbWords as $word) {
 
+                if ($word->word == $getWord) {
+                    continue;
+                }
+
                 $matchesCount = 0;
                 $dbWordCombinations = $this->wordCombinations($word->word, 3);
+                if (empty($dbWordCombinations)) {
+                    continue;
+                }
                 foreach ($dbWordCombinations as $dbWordCombination) {
                     $dbWordCombination = mb_strtolower($dbWordCombination);
                     foreach ($getWordCombinations as $getWordCombination) {
@@ -59,6 +69,12 @@ class SearchController extends Controller
                             $matchesCount++;
                         }
                     }
+                }
+                if (end($dbWordCombinations) == end($getWordCombinations)) {
+                    $matchesCount = $matchesCount + 2;
+                }
+                if ($dbWordCombinations[0] == $getWordCombinations[0]) {
+                    $matchesCount = $matchesCount + 2;
                 }
                 if ($matchesCount > 1) {
                     $rhymeClassation[] = array(
