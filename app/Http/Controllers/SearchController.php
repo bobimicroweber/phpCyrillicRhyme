@@ -19,7 +19,7 @@ class SearchController extends Controller
         $getText = trim($getText);
         $lines = explode('<br>', $getText);
 
-        $getWord = false;
+        $getWord = '';
         if (isset($lines[array_key_last($lines)-1])) {
             $getWord = $lines[array_key_last($lines)-1];
             $getWord = trim($getWord);
@@ -34,10 +34,14 @@ class SearchController extends Controller
             $getWord = last($getWord);
         }
 
+        $getWord = 'Инкубатор';
+
+
         $rhymeClassation = [];
 
-        if (!empty($getText)) {
-            $getWordCombinations = $this->wordCombinations($getWord);
+        if (!empty($getWord)) {
+
+            $getWordCombinations = $this->wordCombinations($getWord, 3);
 
             $dbWords = Cache::rememberForever('words', function () {
                 return Word::all();
@@ -45,21 +49,31 @@ class SearchController extends Controller
 
             foreach ($dbWords as $word) {
 
+                $matchesCount = 0;
                 $dbWordCombinations = $this->wordCombinations($word->word, 3);
-
-                $wordCombination = mb_strtolower(end($getWordCombinations));
-                $dbWordCombination = mb_strtolower(end($dbWordCombinations));
-
-                if ($wordCombination == $dbWordCombination) {
+                foreach ($dbWordCombinations as $dbWordCombination) {
+                    $dbWordCombination = mb_strtolower($dbWordCombination);
+                    foreach ($getWordCombinations as $getWordCombination) {
+                        $getWordCombination = mb_strtolower($getWordCombination);
+                        if ($getWordCombination == $dbWordCombination) {
+                            $matchesCount++;
+                        }
+                    }
+                }
+                if ($matchesCount > 1) {
                     $rhymeClassation[] = array(
                         'word' => $word->word,
-                        'level' => 1
+                        'level' => $matchesCount
                     );
                 }
             }
+
+            array_multisort(array_map(function($element) {
+                return $element['level'];
+            }, $rhymeClassation), SORT_DESC, $rhymeClassation);
         }
 
-        return view('autocomplete', ['results'=>$rhymeClassation]);
+        return view('autocomplete', ['word'=>$getWord,'results'=>$rhymeClassation]);
     }
     public function search() {
          return view('welcome');

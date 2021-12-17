@@ -12,5 +12,6 @@
 */
 
 Route::get('/', 'SearchController@search');
+Route::get('/autocomplete', 'SearchController@autocomplete');
 Route::post('/autocomplete', 'SearchController@autocomplete')->name('autocomplete');
 Route::get('/search', 'SearchController@search');
