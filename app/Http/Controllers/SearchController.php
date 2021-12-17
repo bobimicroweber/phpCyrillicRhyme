@@ -9,41 +9,61 @@ use Illuminate\Support\Facades\Cache;
 class SearchController extends Controller
 {
 
-	public function search()
-	{
-		ini_set('memory_limit', '-1');
+    public function autocomplete()
+    {
+        ini_set('memory_limit', '-1');
 
         $rhymeClassation = array();
 
-		$getWord = Input::get('word');
-        $getWord = trim($getWord);
+        $getText = Input::get('text');
+        $getText = trim($getText);
+        $lines = explode('<br>', $getText);
 
-		$getWordCombinations = $this->wordCombinations($getWord);
+        $getWord = false;
+        if (isset($lines[array_key_last($lines)-1])) {
+            $getWord = $lines[array_key_last($lines)-1];
+            $getWord = trim($getWord);
+            $getWord = explode(' ', $getWord);
+            if (!empty($getWord)) {
+                $getWord = last($getWord);
+            }
+        }
 
-		$dbWords = Cache::rememberForever('words', function () {
-			return Word::all();
-		});
+        if (empty($getWord)) {
+            $getWord = explode(' ', $getText);
+            $getWord = last($getWord);
+        }
 
-		foreach ($dbWords as $word) {
+        $rhymeClassation = [];
 
-           // echo (SoundexBG::dmstring($word->word)[0]- SoundexBG::dmstring($getWord)[0]) . PHP_EOL;
+        if (!empty($getText)) {
+            $getWordCombinations = $this->wordCombinations($getWord);
 
-			$dbWordCombinations = $this->wordCombinations($word->word, 3);
+            $dbWords = Cache::rememberForever('words', function () {
+                return Word::all();
+            });
 
-			$wordCombination = mb_strtolower(end($getWordCombinations));
-			$dbWordCombination = mb_strtolower(end($dbWordCombinations));
+            foreach ($dbWords as $word) {
 
-			if ($wordCombination == $dbWordCombination) {
-				$rhymeClassation[] = array(
-					'word'=>$word->word,
-					'level'=>1
-				);
-			}
-		}
+                $dbWordCombinations = $this->wordCombinations($word->word, 3);
 
-		return view('welcome', ['searchedWord'=>$getWord, 'results'=>$rhymeClassation]);
-	}
+                $wordCombination = mb_strtolower(end($getWordCombinations));
+                $dbWordCombination = mb_strtolower(end($dbWordCombinations));
 
+                if ($wordCombination == $dbWordCombination) {
+                    $rhymeClassation[] = array(
+                        'word' => $word->word,
+                        'level' => 1
+                    );
+                }
+            }
+        }
+
+        return view('autocomplete', ['results'=>$rhymeClassation]);
+    }
+    public function search() {
+         return view('welcome');
+    }
 
 	private function wordCombinations($word, $combinationNumbers = 3) {
 

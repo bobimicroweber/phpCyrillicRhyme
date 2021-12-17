@@ -6,12 +6,22 @@
 
         <title>phpCyrillicRhyme</title>
 
-        <!-- Fonts -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <link href="//fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <script src="js/jquery.js"></script>
         <script src="js/jquery.caret.js"></script>
         <script src="js/autocomplete.js"></script>
+
+
+        <script>
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        </script>
 
         <!-- Styles -->
         <style>
@@ -132,10 +142,21 @@
                     $(document).ready(function() {
                         $('body').keyup(function(e){
                             if(e.keyCode == 8 || e.keyCode == 32) {
-
+                                autocomplete();
                             }
                         });
                     });
+                    function autocomplete()
+                    {
+                        var myTextareaVal = $('#js-autocomplete-editor textarea').val();
+                        var myLineBreak = myTextareaVal.replace(/\n|\n/g,"<br>");
+
+                        $.post("{{route('autocomplete')}}", {
+                            text: myLineBreak,
+                        }, function(data, status){
+                            $('#js-autocomplete-suggestions').html(data);
+                        });
+                    }
                 </script>
 
                 <div id="js-autocomplete">
