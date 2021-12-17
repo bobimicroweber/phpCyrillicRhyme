@@ -7,12 +7,11 @@
         <title>phpCyrillicRhyme</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
-        <link href="css/jquery.atwho.css" rel="stylesheet">
-        <script src="//code.jquery.com/jquery.js"></script>
+        <script src="js/jquery.js"></script>
         <script src="js/jquery.caret.js"></script>
-        <script src="js/jquery.atwho.js"></script>
+        <script src="js/autocomplete.js"></script>
 
         <!-- Styles -->
         <style>
@@ -95,21 +94,56 @@
                 </div>
 
                 <style>
-                    .js-autocomplete-editor {
-                        margin:0 auto;
-                        width:50%;
-                        background: #f2f2f2;
-                        height: 600px;
-                        padding:15px;
+                    #js-autocomplete {
                         text-align: left;
                         font-size: 16px;
                         font-weight: bold;
                         color:#000000;
+                        width: 60%;
+                        margin:0 auto;
+                    }
+                    #js-autocomplete-editor {
+                        width: 70%;
+                        float:left;
+                        height:700px;
+                    }
+                    #js-autocomplete-editor input:focus, textarea:focus, select:focus {
+                        outline: none;
+                        border:0px;
+                    }
+                    #js-autocomplete-editor textarea {
+                        background: #f2f2f2;
+                        border:0px;
+                        height:100%;
+                        width:98%;
+                        padding:15px;
+                    }
+                    #js-autocomplete-suggestions {
+                        width:24%;
+                        padding:15px;
+                        float:left;
+                        background: #e6e6e6;
+                        text-align: center;
+                        height:700px;
                     }
                 </style>
 
+                <script>
+                    $(document).ready(function() {
+                        $('body').keyup(function(e){
+                            if(e.keyCode == 8 || e.keyCode == 32) {
 
-                <div class="js-autocomplete-editor" contenteditable="true"></div>
+                            }
+                        });
+                    });
+                </script>
+
+                <div id="js-autocomplete">
+                    <div id="js-autocomplete-editor">
+                       <textarea placeholder="Започни да пишеш тук..."></textarea>
+                    </div>
+                    <div id="js-autocomplete-suggestions">ПОДСКАЗКИ</div>
+                </div>
 
             </div>
         </div>
