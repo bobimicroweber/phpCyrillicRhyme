@@ -117,16 +117,16 @@
                         float:left;
                         height:700px;
                     }
-                    #js-autocomplete-editor input:focus, textarea:focus, select:focus {
-                        outline: none;
-                        border:0px;
-                    }
-                    #js-autocomplete-editor textarea {
+                    #js-autocomplete-editor-textarea {
                         background: #f2f2f2;
                         border:0px;
                         height:100%;
                         width:98%;
                         padding:15px;
+                    }
+                    #js-autocomplete-editor-textarea input:focus, textarea:focus, select:focus {
+                        outline: none;
+                        border:0px;
                     }
                     #js-autocomplete-suggestions {
                         width:24%;
@@ -141,14 +141,14 @@
                 <script>
                     $(document).ready(function() {
                         $('body').keyup(function(e){
-                            if(e.keyCode == 8 || e.keyCode == 32) {
+                            if (e.keyCode == 13) {
                                 autocomplete();
                             }
                         });
                     });
                     function autocomplete()
                     {
-                        var myTextareaVal = $('#js-autocomplete-editor textarea').val();
+                        var myTextareaVal = $('#js-autocomplete-editor-textarea').val();
                         var myLineBreak = myTextareaVal.replace(/\n|\n/g,"<br>");
 
                         $.post("{{route('autocomplete')}}", {
@@ -161,7 +161,7 @@
 
                 <div id="js-autocomplete">
                     <div id="js-autocomplete-editor">
-                       <textarea placeholder="Започни да пишеш тук..."></textarea>
+                       <textarea id="js-autocomplete-editor-textarea" placeholder="Започни да пишеш тук..."></textarea>
                     </div>
                     <div id="js-autocomplete-suggestions">ПОДСКАЗКИ</div>
                 </div>
