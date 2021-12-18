@@ -24,6 +24,7 @@ class ScrapController extends Controller
             } catch (\Exception $e) {
 
             }
+            sleep(0.60);
         }
 
     }
