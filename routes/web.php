@@ -15,3 +15,5 @@ Route::get('/', 'SearchController@search');
 Route::get('/autocomplete', 'SearchController@autocomplete');
 Route::post('/autocomplete', 'SearchController@autocomplete')->name('autocomplete');
 Route::get('/search', 'SearchController@search');
+Route::get('/add-words', 'SearchController@addWords')->name('add-words');
+Route::post('/add-words', 'SearchController@saveWords');

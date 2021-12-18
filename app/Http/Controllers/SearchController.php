@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\SoundexBG;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Word;
 use Illuminate\Support\Facades\Cache;
@@ -72,6 +73,39 @@ class SearchController extends Controller
         }, $rhymeClassation), SORT_DESC, $rhymeClassation);
 
         return view('autocomplete', ['word'=>$getWord,'results'=>$rhymeClassation]);
+    }
+
+    public function addWords() {
+
+        return view('add-words');
+    }
+
+    public function saveWords(Request $request) {
+
+        $text = $request->get('text');
+        $text = mb_strtolower($text);
+        $text = str_replace(',','',$text);
+        $text = str_replace('!','',$text);
+        $text = str_replace('.','',$text);
+        $text = str_replace('-','',$text);
+        $text = str_replace(':','',$text);
+        $words = explode(' ', $text);
+
+        $readyWords = [];
+        foreach ($words as $word) {
+            if (mb_strlen($word) > 3) {
+                $word = mb_strtolower($word);
+                $readyWords[] = $word;
+            }
+        }
+
+        if (!empty($readyWords)) {
+            foreach ($readyWords as $word) {
+                Word::saveWord($word);
+            }
+        }
+
+        return redirect(route('add-words'));
     }
 
     public function search() {
