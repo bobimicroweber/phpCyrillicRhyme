@@ -20,7 +20,7 @@ class Word extends Model
 
             $wordCombinations = RhymeHelper::wordCombinations($word, 3);
             if (!isset($wordCombinations[0])) {
-                continue;
+                return;
             }
 
             $wordFirstSylable = $wordCombinations[0];
