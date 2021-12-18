@@ -44,7 +44,7 @@ class SearchController extends Controller
 
         $rhymeClassation = [];
 
-        $wordSSC = RhymeHelper::getConsonants($getWord);
+        $wordSSC = RhymeHelper::getSimilarSounding($getWord);
         dump($wordSSC);
 
         foreach ($wordSSC as $desiredWord) {
@@ -59,7 +59,7 @@ class SearchController extends Controller
                 ->get();
             if ($findRhymes->count() > 0) {
                 foreach ($findRhymes as $word) {
-                    $rhymeClassation[] = array(
+                    $rhymeClassation[$word->id] = array(
                         'word' => $word->word,
                         'level' => 0
                     );

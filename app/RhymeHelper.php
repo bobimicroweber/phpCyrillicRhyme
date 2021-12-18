@@ -68,11 +68,11 @@ class RhymeHelper
         return $arr;
     }
 
-    public static function getConsonants($getWord)
+    public static function getSimilarSounding($getWord)
     {
         $wordSSC = [];
         $wordSSC[] = $getWord;
-        $consonants = self::consonants();
+        $consonants = self::similarSoundingLetters();
 
         foreach($consonants as $letter=>$sameSoundingLetters) {
             foreach($sameSoundingLetters as $sameSounding) {
@@ -92,7 +92,7 @@ class RhymeHelper
     }
 
 
-    public static function consonants()
+    public static function similarSoundingLetters()
     {
         return [
             "т"=>["д"],
