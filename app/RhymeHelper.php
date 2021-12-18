@@ -68,25 +68,25 @@ class RhymeHelper
         return $arr;
     }
 
-    public static function getSoundlyAndSoundlessConsonants($getWord)
+    public static function getConsonants($getWord)
     {
         $wordSSC = [];
         $wordSSC[] = $getWord;
-        $syllables = self::soundlyAndSoundlessConsonants();
+        $consonants = self::consonants();
 
-        foreach($syllables as $syllable=>$secondSyllable) {
+        foreach($consonants as $letter=>$sameSoundingLetters) {
+            foreach($sameSoundingLetters as $sameSounding) {
 
-            $replacedWord = str_replace($syllable, $secondSyllable, $getWord);
-            if ($replacedWord !== $getWord) {
-                $wordSSC[] = $replacedWord;
-            }
+                 $replacedWord = str_replace($letter, $sameSounding, $getWord);
+                 $wordSSC[] = $replacedWord;
 
-            $replacedWord = str_replace($secondSyllable, $syllable, $getWord);
-            if ($replacedWord !== $getWord) {
-                $wordSSC[] = $replacedWord;
+                 $replacedWord = str_replace($sameSounding, $letter, $getWord);
+                 $wordSSC[] = $replacedWord;
             }
 
         }
+
+        $wordSSC = array_unique($wordSSC);
 
         return $wordSSC;
     }
@@ -95,14 +95,14 @@ class RhymeHelper
     public static function consonants()
     {
         return [
-            "т"=>"д",
-            "с"=>"з",
-            "к"=>"г",
-            "п"=>"б",
-            "ф"=>"в",
-            "ш"=>"ж",
-            "щ"=>"ж",
-            "о"=>"у",
+            "т"=>["д"],
+            "с"=>["з"],
+            "к"=>["г"],
+            "п"=>["б"],
+            "ф"=>["в"],
+            "ш"=>["ж"],
+            "щ"=>["ж","шт"],
+            "о"=>["у"],
         ];
     }
 
