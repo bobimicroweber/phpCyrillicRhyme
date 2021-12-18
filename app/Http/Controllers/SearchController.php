@@ -38,59 +38,60 @@ class SearchController extends Controller
         $getWord = mb_strtolower($getWord);
         $getWord = str_replace('<br>', '', $getWord);
 
-       // $getWord = 'Инкубатор';
+        $getWord = 'божидар';
 
         $rhymeClassation = [];
 
-        if (!empty($getWord)) {
+        $dbWords = Cache::rememberForever('words', function () {
+            return Word::all();
+        });
 
-            $getWordCombinations = $this->wordCombinations($getWord, 3);
+        $wordSSC = $this->getSoundlyAndSoundlessConsonants($getWord);
+        foreach ($wordSSC as $desiredWord) {
 
-            $dbWords = Cache::rememberForever('words', function () {
-                return Word::all();
-            });
+            $desiredWordCombinations = $this->wordCombinations($desiredWord, 3);
+            $desiredWordFirstSylable = $desiredWordCombinations[0];
+            $desiredWordLastSylable = end($desiredWordCombinations);
 
             foreach ($dbWords as $word) {
+                /*
+                $wordCombinations = $this->wordCombinations($word, 3);
+                $wordFirstSylable = $wordCombinations[0];
+                $wordLastSylable = end($wordCombinations);*/
 
-                if ($word->word == $getWord) {
-                    continue;
-                }
+            }
 
+        /*    foreach ($dbWords as $word) {
                 $matchesCount = 0;
-                $dbWordCombinations = $this->wordCombinations($word->word, 3);
-                if (empty($dbWordCombinations)) {
-                    continue;
+
+                $wordCombinations = $this->wordCombinations($word, 3);
+                $wordFirstSylable = $wordCombinations[0];
+                $wordLastSylable = end($wordCombinations);
+
+                if ($desiredWordFirstSylable == $wordFirstSylable) {
+                    $matchesCount++;
                 }
-                foreach ($dbWordCombinations as $dbWordCombination) {
-                    $dbWordCombination = mb_strtolower($dbWordCombination);
-                    foreach ($getWordCombinations as $getWordCombination) {
-                        $getWordCombination = mb_strtolower($getWordCombination);
-                        if ($getWordCombination == $dbWordCombination) {
-                            $matchesCount++;
-                        }
-                    }
+
+                if ($desiredWordLastSylable == $wordLastSylable) {
+                    $matchesCount++;
                 }
-                if (end($dbWordCombinations) == end($getWordCombinations)) {
-                    $matchesCount = $matchesCount + 3;
-                }
-                if ($dbWordCombinations[0] == $getWordCombinations[0]) {
-                    $matchesCount = $matchesCount + 2;
-                }
-                if ($matchesCount > 3) {
+
+               /* if ($matchesCount > 1) {
                     $rhymeClassation[] = array(
                         'word' => $word->word,
                         'level' => $matchesCount
                     );
                 }
-            }
-
-            array_multisort(array_map(function($element) {
-                return $element['level'];
-            }, $rhymeClassation), SORT_DESC, $rhymeClassation);
+            }*/
         }
+
+        array_multisort(array_map(function($element) {
+            return $element['level'];
+        }, $rhymeClassation), SORT_DESC, $rhymeClassation);
 
         return view('autocomplete', ['word'=>$getWord,'results'=>$rhymeClassation]);
     }
+
     public function search() {
          return view('welcome');
     }
@@ -147,15 +148,88 @@ class SearchController extends Controller
 	}
 
 	private function split($str, $len = 1)
-	{
-		$arr = [];
-		$length = mb_strlen($str, 'UTF-8');
+    {
+        $arr = [];
+        $length = mb_strlen($str, 'UTF-8');
 
-		for ($i = 0; $i < $length; $i += $len) {
+        for ($i = 0; $i < $length; $i += $len) {
 
-			$arr[] = mb_substr($str, $i, $len, 'UTF-8');
-		}
+            $arr[] = mb_substr($str, $i, $len, 'UTF-8');
+        }
 
-		return $arr;
-	}
+        return $arr;
+    }
+
+    private function getSoundlyAndSoundlessConsonants($getWord)
+    {
+        $wordSSC = [];
+        $wordSSC[] = $getWord;
+        $syllables = $this->soundlyAndSoundlessConsonants();
+
+        foreach($syllables as $syllable=>$secondSyllable) {
+
+            $replacedWord = str_replace($syllable, $secondSyllable, $getWord);
+            if ($replacedWord !== $getWord) {
+                $wordSSC[] = $replacedWord;
+            }
+
+            $replacedWord = str_replace($secondSyllable, $syllable, $getWord);
+            if ($replacedWord !== $getWord) {
+                $wordSSC[] = $replacedWord;
+            }
+
+        }
+
+        return $wordSSC;
+    }
+
+
+    private function soundlyAndSoundlessConsonants()
+    {
+        return [
+            "ба"=>"па",
+            "бъ"=>"пъ",
+            "бо"=>"по",
+            "бу"=>"пу",
+            "бе"=>"пе",
+            "би"=>"пи",
+
+            "ва"=>"фа",
+            "въ"=>"фъ",
+            "во"=>"фо",
+            "ву"=>"фу",
+            "ве"=>"фе",
+            "ви"=>"фи",
+
+            "да"=>"та",
+            "дъ"=>"тъ",
+            "до"=>"то",
+            "ду"=>"ту",
+            "де"=>"те",
+            "ди"=>"ти",
+
+            "за"=>"са",
+            "зъ"=>"съ",
+            "зо"=>"со",
+            "зу"=>"су",
+            "зе"=>"се",
+            "зи"=>"си",
+
+            "жа"=>"ша",
+            "жъ"=>"шъ",
+            "жо"=>"шо",
+            "жу"=>"шу",
+            "же"=>"ше",
+            "жи"=>"ши",
+
+            "га"=>"ка",
+            "гъ"=>"къ",
+            "го"=>"ко",
+            "гу"=>"ку",
+            "ге"=>"ке",
+            "ги"=>"ки",
+
+        ];
+    }
+
 }
