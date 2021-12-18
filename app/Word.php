@@ -7,12 +7,6 @@ use App\RhymeHelper;
 
 class Word extends Model
 {
-    protected $casts = [
-        'similar_sounding'=>'json',
-        'word_combinations'=>'json',
-        'soundly_syllables'=>'json'
-    ];
-
     public static function saveWord($word) {
 
         $wordModel = Word::where('word', $word)->first();
@@ -31,8 +25,8 @@ class Word extends Model
         $wordModel->word = $word;
         $wordModel->first_syllable = $wordFirstSylable;
         $wordModel->last_syllable = $wordLastSylable;
-        $wordModel->word_combinations = $wordCombinations;
-        $wordModel->similar_sounding = RhymeHelper::getSimilarSounding($word);
+        $wordModel->word_combinations = implode('|',$wordCombinations);
+        $wordModel->similar_sounding = implode('|',RhymeHelper::getSimilarSounding($word));
         $wordModel->save();
 
 

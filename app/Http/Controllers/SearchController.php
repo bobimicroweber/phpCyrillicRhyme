@@ -50,7 +50,7 @@ class SearchController extends Controller
 
         foreach ($wordSSC as $desiredWord) {
 
-            $desiredWordCombinations =  RhymeHelper::wordCombinations($desiredWord, 3);
+            $desiredWordCombinations =  RhymeHelper::wordCombinations($desiredWord, 4);
             $desiredWordFirstSylable = $desiredWordCombinations[0];
             $desiredWordLastSylable = end($desiredWordCombinations);
 
