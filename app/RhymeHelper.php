@@ -72,7 +72,7 @@ class RhymeHelper
     {
         $wordSSC = [];
         $wordSSC[] = $getWord;
-        $syllables = $this->soundlyAndSoundlessConsonants();
+        $syllables = self::soundlyAndSoundlessConsonants();
 
         foreach($syllables as $syllable=>$secondSyllable) {
 

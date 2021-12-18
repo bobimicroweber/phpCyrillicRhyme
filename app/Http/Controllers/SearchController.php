@@ -5,6 +5,7 @@ use App\SoundexBG;
 use Illuminate\Support\Facades\Input;
 use App\Word;
 use Illuminate\Support\Facades\Cache;
+use App\RhymeHelper;
 
 class SearchController extends Controller
 {
@@ -38,51 +39,32 @@ class SearchController extends Controller
         $getWord = mb_strtolower($getWord);
         $getWord = str_replace('<br>', '', $getWord);
 
-        $getWord = 'божидар';
+    //    $getWord = 'божидар';
 
         $rhymeClassation = [];
 
-        $dbWords = Cache::rememberForever('words', function () {
-            return Word::all();
-        });
+        $wordSSC = RhymeHelper::getSoundlyAndSoundlessConsonants($getWord);
+        dump($wordSSC);
 
-        $wordSSC = $this->getSoundlyAndSoundlessConsonants($getWord);
         foreach ($wordSSC as $desiredWord) {
 
-            $desiredWordCombinations = $this->wordCombinations($desiredWord, 3);
+            $desiredWordCombinations =  RhymeHelper::wordCombinations($desiredWord, 3);
             $desiredWordFirstSylable = $desiredWordCombinations[0];
             $desiredWordLastSylable = end($desiredWordCombinations);
 
-            foreach ($dbWords as $word) {
-                /*
-                $wordCombinations = $this->wordCombinations($word, 3);
-                $wordFirstSylable = $wordCombinations[0];
-                $wordLastSylable = end($wordCombinations);*/
-
-            }
-
-        /*    foreach ($dbWords as $word) {
-                $matchesCount = 0;
-
-                $wordCombinations = $this->wordCombinations($word, 3);
-                $wordFirstSylable = $wordCombinations[0];
-                $wordLastSylable = end($wordCombinations);
-
-                if ($desiredWordFirstSylable == $wordFirstSylable) {
-                    $matchesCount++;
-                }
-
-                if ($desiredWordLastSylable == $wordLastSylable) {
-                    $matchesCount++;
-                }
-
-               /* if ($matchesCount > 1) {
+            $findRhymes = Word::
+                    where('last_syllable',$desiredWordLastSylable)
+                   // ->where('first_syllable',$desiredWordFirstSylable)
+                ->get();
+            if ($findRhymes->count() > 0) {
+                foreach ($findRhymes as $word) {
                     $rhymeClassation[] = array(
                         'word' => $word->word,
-                        'level' => $matchesCount
+                        'level' => 0
                     );
                 }
-            }*/
+            }
+
         }
 
         array_multisort(array_map(function($element) {

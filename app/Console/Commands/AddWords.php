@@ -45,13 +45,15 @@ class AddWords extends Command
 
         $wordList = [];
 
-    	$wordList1 = $this->_getWordlistFromFile('bg-idioms-cyrillic.txt');
+    	$wordList = $this->_getWordlistFromFile('bg-songs.txt');
+
+        //$wordList1 = $this->_getWordlistFromFile('bg-idioms-cyrillic.txt');
     	//$wordList2 = $this->_getWordlistFromFile('bg-jargon-cyrillic.txt');
     	//$wordList3 = $this->_getWordlistFromFile('bg-neologisms-cyrillic.txt');
     	//$wordList4 = $this->_getWordlistFromFile('bg-obscene-cyrillic.txt');
     	//$wordList5 = $this->_getWordlistFromFile('all-cyrillic.txt');
 
-        $wordList = array_merge($wordList, $wordList1);
+        //$wordList = array_merge($wordList, $wordList1);
         //$wordList = array_merge($wordList, $wordList2);
        // $wordList = array_merge($wordList, $wordList3);
         //$wordList = array_merge($wordList, $wordList4);
