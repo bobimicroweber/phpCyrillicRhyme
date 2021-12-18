@@ -13,19 +13,18 @@ class ScrapController extends Controller
 
     public function index()
     {
-
-        try {
-            $words = $this->scrapWord();
-            if (!empty($words)) {
-                foreach ($words as $word) {
-                    Word::saveWord($word);
+        for ($i = 1; $i <= 10000000000000; $i++) {
+            try {
+                $words = $this->scrapWord();
+                if (!empty($words)) {
+                    foreach ($words as $word) {
+                        Word::saveWord($word);
+                    }
                 }
-            }
-        } catch (\Exception $e) {
-            
-        }
+            } catch (\Exception $e) {
 
-        echo '<meta http-equiv="refresh" content="0.10">';
+            }
+        }
 
     }
 
