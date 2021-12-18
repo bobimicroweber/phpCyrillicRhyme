@@ -16,6 +16,9 @@ class CreateWordsTable extends Migration
     	Schema::create('words', function (Blueprint $table) {
     		$table->bigIncrements('id');
     		$table->string('word')->unique();
+    		$table->string('first_syllable')->nullable();
+    		$table->string('last_syllable')->nullable();
+    		$table->longText('soundly_syllables')->nullable();
     		$table->timestamps();
     	});
     }
