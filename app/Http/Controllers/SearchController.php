@@ -44,8 +44,9 @@ class SearchController extends Controller
 
         $rhymeClassation = [];
 
-        $wordSSC = RhymeHelper::getSimilarSounding($getWord);
-        dump($wordSSC);
+      //  $wordSSC = RhymeHelper::getSimilarSounding($getWord);
+        $wordSSC = [];
+        $wordSSC[] = $getWord;
 
         foreach ($wordSSC as $desiredWord) {
 
