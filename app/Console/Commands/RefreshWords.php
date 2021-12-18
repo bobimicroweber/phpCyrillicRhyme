@@ -43,7 +43,7 @@ class RefreshWords extends Command
 
         $words = Word::get();
         foreach ($words as $word) {
-            Word::saveWord($word->name);
+            Word::saveWord($word->word);
         }
 
         echo 1;
