@@ -21,7 +21,7 @@ class ScrapController extends Controller
             }
         }
 
-        echo '<meta http-equiv="refresh">';
+        echo '<meta http-equiv="refresh" content="0.10">';
 
     }
 
