@@ -43,8 +43,7 @@ class ConvertWords extends Command
 
         $derivativeForms = DerivativeForm::get();
         foreach ($derivativeForms as $derivativeWord) {
-
-
+            Word::saveWord($derivativeWord->name);
         }
 
         echo 1;

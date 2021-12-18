@@ -19,6 +19,10 @@ class Word extends Model
         if ($findWord == null) {
 
             $wordCombinations = RhymeHelper::wordCombinations($word, 3);
+            if (!isset($wordCombinations[0])) {
+                continue;
+            }
+
             $wordFirstSylable = $wordCombinations[0];
             $wordLastSylable = end($wordCombinations);
 
