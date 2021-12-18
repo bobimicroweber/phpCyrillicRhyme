@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Word;
+use App\RhymeHelper;
 
 class AddWords extends Command
 {
@@ -45,15 +46,15 @@ class AddWords extends Command
         $wordList = [];
 
     	$wordList1 = $this->_getWordlistFromFile('bg-idioms-cyrillic.txt');
-    	$wordList2 = $this->_getWordlistFromFile('bg-jargon-cyrillic.txt');
-    	$wordList3 = $this->_getWordlistFromFile('bg-neologisms-cyrillic.txt');
-    	$wordList4 = $this->_getWordlistFromFile('bg-obscene-cyrillic.txt');
+    	//$wordList2 = $this->_getWordlistFromFile('bg-jargon-cyrillic.txt');
+    	//$wordList3 = $this->_getWordlistFromFile('bg-neologisms-cyrillic.txt');
+    	//$wordList4 = $this->_getWordlistFromFile('bg-obscene-cyrillic.txt');
     	//$wordList5 = $this->_getWordlistFromFile('all-cyrillic.txt');
 
         $wordList = array_merge($wordList, $wordList1);
-        $wordList = array_merge($wordList, $wordList2);
-        $wordList = array_merge($wordList, $wordList3);
-        $wordList = array_merge($wordList, $wordList4);
+        //$wordList = array_merge($wordList, $wordList2);
+       // $wordList = array_merge($wordList, $wordList3);
+        //$wordList = array_merge($wordList, $wordList4);
         //$wordList = array_merge($wordList, $wordList5);
 
     	$databaseWords = array();
@@ -64,15 +65,23 @@ class AddWords extends Command
     	foreach($wordList as $word) {
 
             $word = trim($word);
-
     		$searchWord = array_search($word, $databaseWords);
 
     		if (!$searchWord) {
 
                 try {
+
+                    $wordCombinations = RhymeHelper::wordCombinations($word, 3);
+                    $wordFirstSylable = $wordCombinations[0];
+                    $wordLastSylable = end($wordCombinations);
+
                     $wordModel = new Word();
                     $wordModel->word = $word;
+                    $wordModel->first_syllable = $wordFirstSylable;
+                    $wordModel->last_syllable = $wordLastSylable;
+                    $wordModel->word_combinations = $wordCombinations;
                     $wordModel->save();
+
                     // echo $word . PHP_EOL;
                 } catch (\Exception $e) {
 
