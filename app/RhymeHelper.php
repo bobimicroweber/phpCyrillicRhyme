@@ -92,6 +92,20 @@ class RhymeHelper
     }
 
 
+    public static function consonants()
+    {
+        return [
+            "т"=>"д",
+            "с"=>"з",
+            "к"=>"г",
+            "п"=>"б",
+            "ф"=>"в",
+            "ш"=>"ж",
+            "щ"=>"ж",
+            "о"=>"у",
+        ];
+    }
+
     public static function soundlyAndSoundlessConsonants()
     {
         return [
